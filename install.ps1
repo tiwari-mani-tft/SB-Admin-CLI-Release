@@ -1,11 +1,12 @@
 # Stop execution on any error
 $ErrorActionPreference = "Stop"
 
-# Define installation directory and executable path
+# Install location
 $installDir = "$env:LOCALAPPDATA\Programs\SBAdmin"
-$exePath = "$installDir\SBAdmin.exe"
+$exePath    = "$installDir\sbadmin.exe"
+$tempZip    = "$env:TEMP\sbadmin.zip"
 
-# Determine system architecture
+# Detect architecture
 if ([Environment]::Is64BitOperatingSystem) {
     if ($env:PROCESSOR_ARCHITECTURE -like "*ARM*") {
         $arch = "arm64"
@@ -17,26 +18,42 @@ if ([Environment]::Is64BitOperatingSystem) {
     exit 1
 }
 
-# URL for the latest release download
-$url = "https://github.com/tiwari-mani-tft/SB-Admin-CLI-Release/releases/latest/download/SBAdmin-windows-$arch.exe"
+# Release ZIP URL
+$url = "https://github.com/tiwari-mani-tft/SB-Admin-CLI-Release/releases/latest/download/sbadmin-windows-$arch.zip"
 
-Write-Host "Downloading SBAdmin CLI for architecture: $arch..."
-# Create install directory if it doesn't exist
+Write-Host "Downloading SBAdmin CLI (windows-$arch)..."
+
+# Create install directory
 New-Item -ItemType Directory -Force -Path $installDir | Out-Null
 
-# Download the executable
-Invoke-WebRequest -Uri $url -OutFile $exePath
+# Download ZIP
+Invoke-WebRequest -Uri $url -OutFile $tempZip
 
-Write-Host "Installing..."
+Write-Host "Extracting..."
 
-# Check if install directory is in user PATH; add it if missing
+# Extract ZIP
+Expand-Archive -Path $tempZip -DestinationPath $installDir -Force
+
+# Ensure executable name is lowercase
+$extractedExe = Get-ChildItem $installDir -Filter "*.exe" | Select-Object -First 1
+if ($extractedExe.Name -ne "sbadmin.exe") {
+    Rename-Item $extractedExe.FullName $exePath -Force
+}
+
+# Cleanup
+Remove-Item $tempZip -Force
+
+Write-Host "🛠 Installing..."
+
+# Add to PATH if missing
 $path = [Environment]::GetEnvironmentVariable("PATH", "User")
 if ($path -notlike "*$installDir*") {
     [Environment]::SetEnvironmentVariable("PATH", "$path;$installDir", "User")
-    Write-Host "Added $installDir to PATH environment variable (User scope)."
+    Write-Host "Added SBAdmin to PATH"
 } else {
-    Write-Host "Installation directory already present in PATH."
+    Write-Host "SBAdmin already in PATH"
 }
 
 Write-Host "Installation complete!"
-Write-Host "Please restart PowerShell or your terminal, then run: SBAdmin version"
+Write-Host "Restart PowerShell, then run:"
+Write-Host "sbadmin version"

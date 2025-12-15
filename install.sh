@@ -17,6 +17,7 @@ case "$OS" in
 esac
 
 ARCHIVE="sbadmin-$OS-$ARCH.tar.gz"
+BIN="sbadmin-$OS-$ARCH"
 URL="https://github.com/tiwari-mani-tft/SB-Admin-CLI-Release/releases/latest/download/$ARCHIVE"
 
 echo "Downloading $ARCHIVE..."
@@ -25,10 +26,10 @@ curl -fL "$URL" -o "$ARCHIVE"
 echo "Extracting..."
 tar -xzf "$ARCHIVE"
 
-chmod +x sbadmin
-sudo mv sbadmin /usr/local/bin/sbadmin
+chmod +x "$BIN"
+sudo mv "$BIN" /usr/local/bin/sbadmin
 
 rm -f "$ARCHIVE"
 
 echo "Installation complete"
-echo "Run: sbadmin version"
+sbadmin version

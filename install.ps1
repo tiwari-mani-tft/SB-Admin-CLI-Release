@@ -20,23 +20,23 @@ if ([Environment]::Is64BitOperatingSystem) {
 # URL for the latest release download
 $url = "https://github.com/tiwari-mani-tft/SB-Admin-CLI-Release/releases/latest/download/SBAdmin-windows-$arch.exe"
 
-Write-Host "⬇️ Downloading SBAdmin CLI for architecture: $arch..."
+Write-Host "Downloading SBAdmin CLI for architecture: $arch..."
 # Create install directory if it doesn't exist
 New-Item -ItemType Directory -Force -Path $installDir | Out-Null
 
 # Download the executable
 Invoke-WebRequest -Uri $url -OutFile $exePath
 
-Write-Host "🛠 Installing..."
+Write-Host "Installing..."
 
 # Check if install directory is in user PATH; add it if missing
 $path = [Environment]::GetEnvironmentVariable("PATH", "User")
 if ($path -notlike "*$installDir*") {
     [Environment]::SetEnvironmentVariable("PATH", "$path;$installDir", "User")
-    Write-Host "✅ Added $installDir to PATH environment variable (User scope)."
+    Write-Host "Added $installDir to PATH environment variable (User scope)."
 } else {
-    Write-Host "ℹ️ Installation directory already present in PATH."
+    Write-Host "Installation directory already present in PATH."
 }
 
-Write-Host "🎉 Installation complete!"
-Write-Host "👉 Please restart PowerShell or your terminal, then run: SBAdmin version"
+Write-Host "Installation complete!"
+Write-Host "Please restart PowerShell or your terminal, then run: SBAdmin version"

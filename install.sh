@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 OS="$(uname -s | tr '[:upper:]' '[:lower:]')"
 ARCH="$(uname -m)"
@@ -15,13 +16,19 @@ case "$OS" in
   *) echo "Unsupported OS: $OS" && exit 1 ;;
 esac
 
-BIN="sbadmin-$OS-$ARCH"
+ARCHIVE="sbadmin-$OS-$ARCH.tar.gz"
+URL="https://github.com/tiwari-mani-tft/SB-Admin-CLI-Release/releases/latest/download/$ARCHIVE"
 
-echo "⬇️ Downloading $BIN..."
+echo "Downloading $ARCHIVE..."
+curl -fL "$URL" -o "$ARCHIVE"
 
-curl -LO "https://github.com/tiwari-mani-tft/SB-Admin-CLI-Release/releases/latest/download/$BIN"
-chmod +x "$BIN"
-sudo mv "$BIN" /usr/local/bin/sbadmin
+echo "Extracting..."
+tar -xzf "$ARCHIVE"
 
-echo "🎉 Installation complete!"
-sbadmin version
+chmod +x sbadmin
+sudo mv sbadmin /usr/local/bin/sbadmin
+
+rm -f "$ARCHIVE"
+
+echo "Installation complete"
+echo "Run: sbadmin version"

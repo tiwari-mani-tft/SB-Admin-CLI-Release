@@ -15,13 +15,13 @@ case "$OS" in
   *) echo "Unsupported OS: $OS" && exit 1 ;;
 esac
 
-BIN="SBAdmin-$OS-$ARCH"
+BIN="sbadmin-$OS-$ARCH"
 
 echo "⬇️ Downloading $BIN..."
 
 curl -LO "https://github.com/tiwari-mani-tft/SB-Admin-CLI-Release/releases/latest/download/$BIN"
 chmod +x "$BIN"
-sudo mv "$BIN" /usr/local/bin/SBAdmin
+sudo mv "$BIN" /usr/local/bin/sbadmin
 
 echo "🎉 Installation complete!"
-echo "👉 Run 'SBAdmin version' to check the installed version."
+sbadmin version

@@ -53,6 +53,6 @@ if ($path -notlike "*$installDir*") {
 } else {
     Write-Host "SBAdmin already in PATH"
 }
-
+Write-Host ""
 Write-Host "Installation complete!"
 sbadmin version

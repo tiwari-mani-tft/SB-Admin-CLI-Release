@@ -43,7 +43,7 @@ if ($extractedExe.Name -ne "sbadmin.exe") {
 # Cleanup
 Remove-Item $tempZip -Force
 
-Write-Host "🛠 Installing..."
+Write-Host "Installing..."
 
 # Add to PATH if missing
 $path = [Environment]::GetEnvironmentVariable("PATH", "User")

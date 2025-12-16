@@ -43,7 +43,7 @@ if ($extractedExe.Name -ne "sbadmin.exe") {
 # Cleanup
 Remove-Item $tempZip -Force
 
-Write-Host "Installing..."
+Write-Host "Installing... sbadmin"
 
 # Add to PATH if missing
 $path = [Environment]::GetEnvironmentVariable("PATH", "User")
@@ -55,5 +55,4 @@ if ($path -notlike "*$installDir*") {
 }
 
 Write-Host "Installation complete!"
-Write-Host "Restart PowerShell, then run:"
-Write-Host "sbadmin version"
+sbadmin version

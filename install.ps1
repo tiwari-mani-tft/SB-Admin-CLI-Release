@@ -55,4 +55,5 @@ if ($path -notlike "*$installDir*") {
 }
 Write-Host ""
 Write-Host "Installation complete!"
-sbadmin version
+Write-Host "Restart PowerShell, then run:"
+Write-Host "sbadmin version"

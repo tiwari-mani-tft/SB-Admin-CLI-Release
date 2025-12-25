@@ -53,6 +53,41 @@ if ($path -notlike "*$installDir*") {
 } else {
     Write-Host "SBAdmin already in PATH"
 }
+
+# --------------------------------------------------
+# 🔥 PowerShell completion setup
+# --------------------------------------------------
+
+Write-Host "Setting up PowerShell completion..."
+
+$profileDir = Split-Path $PROFILE
+$completionFile = "$profileDir\sbadmin-completion.ps1"
+
+# Ensure profile directory exists
+if (!(Test-Path $profileDir)) {
+    New-Item -ItemType Directory -Path $profileDir -Force | Out-Null
+}
+
+# Generate completion script
+& $exePath completion powershell | Out-File -Encoding UTF8 $completionFile
+
+# Ensure profile loads completion
+if (!(Test-Path $PROFILE)) {
+    New-Item -ItemType File -Path $PROFILE -Force | Out-Null
+}
+
+$profileContent = Get-Content $PROFILE -ErrorAction SilentlyContinue
+if ($profileContent -notmatch "sbadmin-completion.ps1") {
+    Add-Content $PROFILE "`n# SBAdmin CLI completion`n. `"$completionFile`""
+}
+
+Write-Host "✔ PowerShell completion installed"
+
+Write-Host ""
+Write-Host "Restart PowerShell or run:"
+Write-Host ". `$PROFILE"
+
+
 Write-Host ""
 Write-Host "Installation complete!"
 Write-Host "Restart PowerShell, then run:"
